@@ -5,6 +5,9 @@ const isGitHubPages = process.env.GITHUB_ACTIONS === "true";
 const nextConfig: NextConfig = {
   output: isGitHubPages ? "export" : "standalone",
   ...(isGitHubPages ? { basePath: "/amagent" } : {}),
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGitHubPages ? "/amagent" : "",
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Download, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { assetPath } from "@/lib/assets";
 
 export function StickyDownloadBar() {
   const [visible, setVisible] = useState(false);
@@ -54,7 +55,7 @@ export function StickyDownloadBar() {
             {/* Brand logo chip */}
             <div className="relative h-8 w-8 rounded-lg overflow-hidden ring-1 ring-white/15 shrink-0">
               <Image
-                src="/logo-nav.png"
+                src={assetPath("/logo-nav.png")}
                 alt="Devhub Solutions logo"
                 fill
                 sizes="32px"

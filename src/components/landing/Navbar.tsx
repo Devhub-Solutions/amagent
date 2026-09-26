@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { Download, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { assetPath } from "@/lib/assets";
 
 const NAV_LINKS = [
   { href: "#features", label: "Tính năng" },
@@ -51,7 +52,7 @@ export function Navbar() {
           <a href="#top" className="flex items-center gap-2.5 shrink-0 group">
             <div className="relative h-10 w-10 rounded-xl overflow-hidden ring-1 ring-white/10 shadow-lg glow-electric group-hover:scale-[1.05] transition-transform">
               <Image
-                src="/logo-nav.png"
+                src={assetPath("/logo-nav.png")}
                 alt="Devhub Solutions logo"
                 fill
                 sizes="40px"

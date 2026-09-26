@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import { Chrome, Settings2, Circle, Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { assetPath } from "@/lib/assets";
 
 /* ============================================================
  * AppScreenshot — wraps a real app screenshot in a desktop
@@ -73,7 +74,7 @@ export function AppScreenshot({
       )}
       <div className="relative bg-black/40 aspect-[1280/800]">
         <Image
-          src={`/screenshots/${shot}.png`}
+          src={assetPath(`/screenshots/${shot}.png`)}
           alt={LABELS[shot]}
           fill
           sizes="(max-width: 768px) 100vw, 480px"
@@ -130,7 +131,7 @@ export function ScreenshotLightbox({
           </h3>
         </div>
         <Image
-          src={`/screenshots/${shot}.png`}
+          src={assetPath(`/screenshots/${shot}.png`)}
           alt={LABELS[shot]}
           width={1280}
           height={800}

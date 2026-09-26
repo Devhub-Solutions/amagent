@@ -11,6 +11,7 @@ import {
   HardDrive,
   ArrowDownToLine,
 } from "lucide-react";
+import { assetPath } from "@/lib/assets";
 import {
   AppleIcon,
   WindowsIcon,
@@ -274,7 +275,7 @@ export function DownloadCTA() {
                 {/* Real screenshot — next/image with responsive sizes */}
                 <div className="relative aspect-[1280/800]">
                   <Image
-                    src="/screenshots/dashboard.png"
+                    src={assetPath("/screenshots/dashboard.png")}
                     alt="AmAgent — Dashboard chính"
                     fill
                     sizes="(max-width: 768px) 100vw, 448px"

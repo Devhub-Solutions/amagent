@@ -3,6 +3,7 @@ import { Geist, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { WebVitals } from "@/components/landing/WebVitals";
 import ServiceWorkerRegister from "@/components/landing/ServiceWorkerRegister";
+import { assetPath } from "@/lib/assets";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,13 +55,13 @@ export const metadata: Metadata = {
   formatDetection: { telephone: true, address: true, email: true },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.png", type: "image/png", sizes: "64x64" },
-      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
-      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+      { url: assetPath("/favicon.ico"), sizes: "any" },
+      { url: assetPath("/favicon.png"), type: "image/png", sizes: "64x64" },
+      { url: assetPath("/icon-192.png"), type: "image/png", sizes: "192x192" },
+      { url: assetPath("/icon-512.png"), type: "image/png", sizes: "512x512" },
     ],
-    shortcut: ["/favicon.ico"],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: [assetPath("/favicon.ico")],
+    apple: [{ url: assetPath("/apple-touch-icon.png"), sizes: "180x180", type: "image/png" }],
   },
   manifest: undefined,
   openGraph: {

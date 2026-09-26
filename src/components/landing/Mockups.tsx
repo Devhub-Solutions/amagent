@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { assetPath } from "@/lib/assets";
 import Image from "next/image";
 import {
   Activity,
@@ -83,7 +84,7 @@ export function ChatPanel({ className }: { className?: string }) {
         <div className="flex items-center gap-2">
           <div className="relative h-8 w-8 rounded-lg overflow-hidden ring-1 ring-white/15 shadow-lg shrink-0">
             <Image
-              src="/logo-nav.png"
+              src={assetPath("/logo-nav.png")}
               alt="Devhub Solutions logo"
               fill
               sizes="32px"

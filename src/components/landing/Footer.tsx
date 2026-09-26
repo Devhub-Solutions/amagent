@@ -11,6 +11,7 @@ import {
   BadgeCheck,
   User,
 } from "lucide-react";
+import { assetPath } from "@/lib/assets";
 
 const LINKS: Record<string, { label: string; href: string }[]> = {
   "Sản phẩm": [
@@ -63,7 +64,7 @@ export function Footer() {
             <div className="flex items-center gap-3">
               <div className="relative h-12 w-12 rounded-xl overflow-hidden ring-1 ring-white/10 shadow-lg shrink-0">
                 <Image
-                  src="/logo-footer.png"
+                  src={assetPath("/logo-footer.png")}
                   alt="Devhub Solutions logo"
                   fill
                   sizes="48px"

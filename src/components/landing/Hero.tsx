@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { assetPath } from "@/lib/assets";
 import Image from "next/image";
 import {
   ArrowRight,
@@ -185,7 +186,7 @@ export function Hero() {
             <div className="relative bg-[oklch(0.14_0.022_264)] aspect-[1285/783]">
               {/* Real app screenshot (dark login screen) — LCP image, priority + AVIF/WebP */}
               <Image
-                src="/screenshots/login.png"
+                src={assetPath("/screenshots/login.png")}
                 alt="AmAgent — màn hình đăng nhập"
                 fill
                 priority

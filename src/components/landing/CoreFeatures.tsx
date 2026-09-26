@@ -16,6 +16,7 @@ import {
   Chrome,
 } from "lucide-react";
 import { SectionMarker } from "./SectionMarker";
+import { assetPath } from "@/lib/assets";
 
 type Feature = {
   id: string;
@@ -276,7 +277,7 @@ export function CoreFeatures() {
                 className="group relative rounded-xl overflow-hidden border border-white/8 hover:border-cyan-300/30 transition-colors aspect-[16/9]"
               >
                 <Image
-                  src={`/screenshots/${s.shot}.png`}
+                  src={assetPath(`/screenshots/${s.shot}.png`)}
                   alt={`AmAgent — ${s.label}`}
                   fill
                   sizes="(max-width: 768px) 50vw, 320px"
