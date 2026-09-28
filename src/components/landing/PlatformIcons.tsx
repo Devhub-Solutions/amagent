@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { assetPath } from "@/lib/assets";
 
 /* ============================================================
  * Platform icons — branded SVG paths for Windows, macOS, Linux,
@@ -42,7 +43,7 @@ function LocalBrandIcon({
 }: IconProps & { src: string; alt?: string }) {
   return (
     <img
-      src={src}
+      src={assetPath(src)}
       alt={alt}
       className={cn("h-5 w-5 object-contain", GLOW_BY_INTENSITY[glow], className)}
       aria-hidden={alt ? undefined : true}
