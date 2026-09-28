@@ -17,19 +17,34 @@ env:
   SOURCE_REPO: Devhub-Solutions/AmAgentCore
   TARGET_REPO: Devhub-Solutions/amagent
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   sync-release:
     name: Sync latest installer release
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check required source token
+        env:
+          SOURCE_TOKEN: ${{ secrets.AMAGENTCORE_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$SOURCE_TOKEN" ]]; then
+            echo "Missing repository secret AMAGENTCORE_READ_TOKEN." >&2
+            echo "Create a fine-grained PAT with Contents: Read on Devhub-Solutions/AmAgentCore." >&2
+            exit 1
+          fi
+
       - name: Install GitHub CLI
         run: gh --version
 
       - name: Find latest Core release
         id: source
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.AMAGENTCORE_READ_TOKEN }}
         run: |
           set -euo pipefail
           tag="$(gh release view --repo "$SOURCE_REPO" --json tagName --jq .tagName)"
@@ -53,7 +68,7 @@ jobs:
 
       - name: Download installer assets from Core
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.AMAGENTCORE_READ_TOKEN }}
           TAG: ${{ steps.source.outputs.tag }}
         run: |
           set -euo pipefail
