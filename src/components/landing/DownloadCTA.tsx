@@ -4,7 +4,6 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import {
   CheckCircle2,
-  ArrowRight,
   Sparkles,
   ShieldCheck,
   Cpu,
@@ -22,56 +21,6 @@ import {
 
 const RELEASE_DOWNLOAD_BASE =
   "https://github.com/Devhub-Solutions/AmAgentCore/releases/latest/download";
-
-const PLANS = [
-  {
-    name: "Free",
-    price: "0đ",
-    period: "/ vĩnh viễn",
-    desc: "Cho cá nhân & học sinh",
-    features: [
-      "3 workflow đang hoạt động",
-      "1 luồng chạy song song",
-      "Record & Replay không giới hạn",
-      "Agent Chat 50 tin / ngày",
-      "Cộng đồng Discord",
-    ],
-    cta: "Tải xuống miễn phí",
-    highlight: false,
-  },
-  {
-    name: "Pro",
-    price: "490k",
-    period: "/ tháng",
-    desc: "Cho freelancer & team nhỏ",
-    features: [
-      "Workflow không giới hạn",
-      "8 luồng chạy song song",
-      "Agent Chat không giới hạn",
-      "Lên lịch + trigger webhook",
-      "Xuất Excel / CSV / JSON / API",
-      "Hỗ trợ ưu tiên",
-    ],
-    cta: "Dùng thử 14 ngày",
-    highlight: true,
-  },
-  {
-    name: "Team",
-    price: "Liên hệ",
-    period: "",
-    desc: "Cho doanh nghiệp",
-    features: [
-      "Mọi thứ trong Pro",
-      "Quản lý người dùng + vai trò",
-      "Chạy server-side (headless 24/7)",
-      "SSO + audit log",
-      "SLA 99.9% · on-prem option",
-      "Onboarding & training",
-    ],
-    cta: "Đặt lịch demo",
-    highlight: false,
-  },
-];
 
 type Platform = {
   id: string;
@@ -161,15 +110,15 @@ export function DownloadCTA() {
             <div className="flex-1 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs text-white/80 mb-4">
                 <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
-                Sẵn sàng để AI làm việc thay bạn?
+                AmAgent Beta — mời bạn dùng thử
               </div>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-[1.1]">
-                Tải Devhub Solutions{" "}
-                <span className="text-gradient-electric">ngay hôm nay</span>.
+                Tải bản Beta miễn phí{" "}
+                <span className="text-gradient-electric">và góp ý cùng chúng tôi</span>.
               </h2>
               <p className="mt-4 text-white/65 text-base lg:text-lg leading-relaxed">
-                Cài đặt trong 90 giây. Dùng thử Pro 14 ngày — không cần thẻ, huỷ
-                bất cứ lúc nào. Dữ liệu của bạn ở lại máy bạn.
+                Cài đặt trong khoảng 90 giây. AmAgent hiện đang ở giai đoạn Beta và
+                miễn phí trong thời gian thử nghiệm — dữ liệu của bạn ở lại máy bạn.
               </p>
 
               {/* ====== PLATFORM DOWNLOAD GRID — prominent icons ====== */}
@@ -238,10 +187,10 @@ export function DownloadCTA() {
 
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/55">
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> Không cần thẻ
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> Beta miễn phí
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> 14 ngày Pro
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> Luôn có bản cập nhật
                 </span>
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Local-first
@@ -294,57 +243,6 @@ export function DownloadCTA() {
             </motion.div>
           </div>
         </motion.div>
-
-        {/* Pricing tiers */}
-        <div className="mt-16 grid md:grid-cols-3 gap-5">
-          {PLANS.map((p, i) => (
-            <motion.div
-              key={p.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className={`relative rounded-3xl p-6 lg:p-8 flex flex-col ${
-                p.highlight
-                  ? "glass-strong border-cyan-400/40 glow-electric"
-                  : "glass"
-              }`}
-            >
-              {p.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest bg-gradient-to-r from-[oklch(0.62_0.20_259)] to-[oklch(0.58_0.21_295)] text-white font-medium">
-                  Phổ biến nhất
-                </div>
-              )}
-              <div className="text-sm text-white/60">{p.name}</div>
-              <div className="mt-2 flex items-baseline gap-1.5">
-                <span className="font-display text-3xl lg:text-4xl font-bold text-white">
-                  {p.price}
-                </span>
-                <span className="text-xs text-white/45">{p.period}</span>
-              </div>
-              <div className="text-xs text-white/55 mt-1">{p.desc}</div>
-              <ul className="mt-5 flex flex-col gap-2 text-sm text-white/75 flex-1">
-                {p.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#"
-                className={`mt-6 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all ${
-                  p.highlight
-                    ? "text-white bg-gradient-to-br from-[oklch(0.62_0.20_259)] to-[oklch(0.58_0.21_295)] hover:scale-[1.02]"
-                    : "text-white glass hover:bg-white/8"
-                }`}
-              >
-                {p.cta}
-                <ArrowRight className="h-4 w-4" />
-              </a>
-            </motion.div>
-          ))}
-        </div>
 
         {/* FAQ teaser */}
         <motion.div

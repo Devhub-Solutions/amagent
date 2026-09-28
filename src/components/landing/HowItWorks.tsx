@@ -215,7 +215,7 @@ export function HowItWorks() {
             <ArrowRight className="h-4 w-4" />
           </a>
           <span className="text-xs text-white/45">
-            Miễn phí 14 ngày · không cần thẻ
+            Miễn phí trong giai đoạn Beta · góp ý để cùng hoàn thiện
           </span>
         </motion.div>
       </div>

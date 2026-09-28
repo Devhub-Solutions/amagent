@@ -64,10 +64,10 @@ export function StickyDownloadBar() {
             </div>
             <div className="min-w-0">
               <div className="font-display text-base sm:text-lg text-white leading-none truncate">
-                Sẵn sàng để AI làm việc thay bạn?
+                AmAgent Beta đang mở dùng thử
               </div>
               <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/45 mt-1 hidden sm:block">
-                Cài đặt 90 giây · Dùng thử Pro 14 ngày
+                Cài đặt khoảng 90 giây · Miễn phí trong giai đoạn Beta
               </div>
             </div>
           </div>
@@ -84,4 +84,3 @@ export function StickyDownloadBar() {
     </div>
   );
 }
-

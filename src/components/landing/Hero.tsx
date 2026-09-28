@@ -51,9 +51,9 @@ export function Hero() {
             className="mt-1 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs text-white/80"
           >
             <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
-            <span>Phiên bản 2.4 · Agent Engine thế hệ mới</span>
+            <span>AmAgent Beta · Agent Engine thế hệ mới</span>
             <span className="h-3 w-px bg-white/15" />
-            <span className="text-cyan-300/80">vừa phát hành</span>
+            <span className="text-cyan-300/80">đang mở dùng thử</span>
           </motion.div>
 
           {/* Headline */}
@@ -86,7 +86,7 @@ export function Hero() {
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-base font-medium text-white bg-gradient-to-br from-[oklch(0.62_0.20_259)] to-[oklch(0.58_0.21_295)] pulse-glow hover:scale-[1.03] transition-transform"
             >
               <Download className="h-4 w-4" />
-              Tải xuống miễn phí
+              Tải bản Beta miễn phí
               <ArrowRight className="h-4 w-4 -mr-1 group-hover:translate-x-0.5 transition-transform" />
             </a>
             <a
@@ -117,8 +117,7 @@ export function Hero() {
               <LinuxIcon className="h-4 w-4 text-cyan-300" glow="soft" /> Linux 64-bit
             </span>
             <span className="flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-violet-300" /> 14 ngày dùng
-              thử Pro
+              <Sparkles className="h-3.5 w-3.5 text-violet-300" /> Beta miễn phí
             </span>
           </motion.div>
         </motion.div>
