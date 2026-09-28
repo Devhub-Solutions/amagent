@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import Image from "next/image";
 import {
   CheckCircle2,
   Sparkles,
@@ -274,23 +273,45 @@ export function DownloadCTA() {
                     app.amagent.ai/dashboard
                   </div>
                 </div>
-                {/* Real screenshot — next/image with responsive sizes */}
-                <div className="relative aspect-[1280/800]">
-                  <Image
-                    src={assetPath("/screenshots/dashboard.png")}
-                    alt="AmAgent — Dashboard chính"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 448px"
-                    className="object-cover object-top"
-                    loading="lazy"
-                    quality={75}
-                  />
+                {/* Product demo video — extended 2x version */}
+                <div className="relative aspect-[1150/720] bg-black">
+                  <video
+                    className="h-full w-full object-cover"
+                    controls
+                    muted
+                    playsInline
+                    preload="metadata"
+                    poster={assetPath("/screenshots/dashboard.png")}
+                    aria-label="Video giới thiệu AmAgent"
+                  >
+                    <source src={assetPath("/videos/amagent-demo-2x.mp4")} type="video/mp4" />
+                    Trình duyệt của bạn không hỗ trợ phát video.
+                  </video>
                 </div>
                 {/* Floating "ready" badge */}
                 <div className="absolute top-12 right-3 flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/40 backdrop-blur-md text-[10px] text-emerald-200">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   agent sẵn sàng
                 </div>
+              </div>
+              <div className="relative mt-3 flex items-center justify-center gap-4 text-xs">
+                <a
+                  href={assetPath("/videos/amagent-demo-60s.mp4")}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-cyan-300 hover:text-cyan-200 underline underline-offset-4"
+                >
+                  Xem video 60 giây
+                </a>
+                <span className="text-white/25">·</span>
+                <a
+                  href={assetPath("/videos/amagent-demo-2x.mp4")}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-white/55 hover:text-white underline underline-offset-4"
+                >
+                  Mở bản đầy đủ 2×
+                </a>
               </div>
             </motion.div>
           </div>
