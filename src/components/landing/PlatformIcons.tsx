@@ -48,21 +48,16 @@ export function AppleIcon({ className, glow = "soft" }: IconProps) {
   );
 }
 
-/* Linux — Tux penguin, monochrome line-art */
+/* Linux — full-color Tux asset supplied for the landing page */
 export function LinuxIcon({ className, glow = "soft" }: IconProps) {
   return (
-    <svg
-      viewBox="0 0 24 24"
+    <img
+      src="/icons/linux-tux.svg"
+      alt=""
       className={cn("h-5 w-5", GLOW_BY_INTENSITY[glow], className)}
-      fill="currentColor"
       aria-hidden="true"
-    >
-      <path d="M12 2.5c-2.35 0-4.1 1.9-4.1 4.65 0 1.12-.45 1.93-1 2.9-.62 1.1-1.3 2.34-1.3 4.3 0 3.9 2.84 7.15 6.4 7.15s6.4-3.25 6.4-7.15c0-1.96-.68-3.2-1.3-4.3-.55-.97-1-1.78-1-2.9C16.1 4.4 14.35 2.5 12 2.5Z" />
-      <path d="M8.55 13.1c.65-1.2 1.72-1.9 3.45-1.9s2.8.7 3.45 1.9v4.15c-.86 1.35-2.02 2.1-3.45 2.1s-2.59-.75-3.45-2.1V13.1Z" fill="none" stroke="currentColor" strokeWidth="1" />
-      <circle cx="10.35" cy="8.3" r=".62" fill="currentColor" />
-      <circle cx="13.65" cy="8.3" r=".62" fill="currentColor" />
-      <path d="m10.8 9.35 1.2 1.15 1.2-1.15-1.2-.7-1.2.7ZM5.6 20.4l2.8-.75M18.4 20.4l-2.8-.75" fill="none" stroke="currentColor" strokeWidth="1.15" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+      draggable={false}
+    />
   );
 }
 
