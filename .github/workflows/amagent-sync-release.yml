@@ -1,9 +1,12 @@
 name: Sync release from AmAgentCore
 
 on:
+  # Automatically run after this workflow is committed or updated.
+  push:
+    branches: [main]
   workflow_dispatch:
   schedule:
-    # Check for a new Core release every 15 minutes.
+    # GitHub may delay scheduled workflows by a few minutes.
     - cron: "*/15 * * * *"
 
 permissions:
@@ -17,56 +20,51 @@ env:
   SOURCE_REPO: Devhub-Solutions/AmAgentCore
   TARGET_REPO: Devhub-Solutions/amagent
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   sync-release:
-    name: Sync latest installer release
+    name: Sync new Core release
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check required source token
+      - name: Check source token
         env:
           SOURCE_TOKEN: ${{ secrets.AMAGENTCORE_READ_TOKEN }}
         run: |
           set -euo pipefail
           if [[ -z "$SOURCE_TOKEN" ]]; then
-            echo "Missing repository secret AMAGENTCORE_READ_TOKEN." >&2
-            echo "Create a fine-grained PAT with Contents: Read on Devhub-Solutions/AmAgentCore." >&2
+            echo "Missing AMAGENTCORE_READ_TOKEN." >&2
+            echo "It must be a fine-grained token with Contents: Read on $SOURCE_REPO." >&2
             exit 1
           fi
 
-      - name: Install GitHub CLI
-        run: gh --version
-
-      - name: Find latest Core release
+      - name: Read latest source release tag
         id: source
         env:
           GH_TOKEN: ${{ secrets.AMAGENTCORE_READ_TOKEN }}
         run: |
           set -euo pipefail
-          tag="$(gh release view --repo "$SOURCE_REPO" --json tagName --jq .tagName)"
+          tag="$(gh api "repos/$SOURCE_REPO/releases/latest" --jq .tag_name)"
+          test -n "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "Latest source release: $tag"
+          echo "Latest AmAgentCore release: $tag"
 
-      - name: Check whether target release is already up to date
+      - name: Check whether release is already synced
         id: target
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.source.outputs.tag }}
         run: |
           set -euo pipefail
-          if gh release view "$TAG" --repo "$TARGET_REPO" >/dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-            echo "Target release $TAG already exists; assets will be refreshed."
+          if gh api "repos/$TARGET_REPO/releases/tags/$TAG" >/dev/null 2>&1; then
+            echo "synced=true" >> "$GITHUB_OUTPUT"
+            echo "Release $TAG is already present in amagent; nothing to do."
           else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "Target release $TAG does not exist; it will be created."
+            echo "synced=false" >> "$GITHUB_OUTPUT"
+            echo "Release $TAG is not present in amagent; syncing it now."
           fi
 
-      - name: Download installer assets from Core
+      - name: Download release assets from AmAgentCore
+        if: steps.target.outputs.synced == 'false'
         env:
           GH_TOKEN: ${{ secrets.AMAGENTCORE_READ_TOKEN }}
           TAG: ${{ steps.source.outputs.tag }}
@@ -74,6 +72,7 @@ jobs:
           set -euo pipefail
           rm -rf release-assets
           mkdir -p release-assets
+
           gh release download "$TAG" \
             --repo "$SOURCE_REPO" \
             --dir release-assets \
@@ -90,17 +89,18 @@ jobs:
           )
           for file in "${expected[@]}"; do
             test -f "release-assets/$file" || {
-              echo "Missing required source asset: $file" >&2
+              echo "Missing required asset: $file" >&2
               exit 1
             }
           done
 
       - name: Verify SHA-256 checksums
+        if: steps.target.outputs.synced == 'false'
         working-directory: release-assets
         run: sha256sum -c SHA256SUMS
 
-      - name: Create target release
-        if: steps.target.outputs.exists == 'false'
+      - name: Create public release in amagent
+        if: steps.target.outputs.synced == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.source.outputs.tag }}
@@ -109,22 +109,6 @@ jobs:
           gh release create "$TAG" \
             --repo "$TARGET_REPO" \
             --title "AmAgent $TAG" \
-            --notes "Installer release synced from [$SOURCE_REPO](https://github.com/$SOURCE_REPO/releases/tag/$TAG)." \
+            --notes "Installer release synced from $SOURCE_REPO release $TAG." \
             --latest \
             release-assets/*
-
-      - name: Refresh existing target release assets
-        if: steps.target.outputs.exists == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.source.outputs.tag }}
-        run: |
-          set -euo pipefail
-          gh release upload "$TAG" \
-            --repo "$TARGET_REPO" \
-            --clobber \
-            release-assets/*
-          gh release edit "$TAG" \
-            --repo "$TARGET_REPO" \
-            --title "AmAgent $TAG" \
-            --latest
