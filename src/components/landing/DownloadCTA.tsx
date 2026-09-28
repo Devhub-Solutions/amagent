@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import {
@@ -9,6 +10,7 @@ import {
   Cpu,
   HardDrive,
   ArrowDownToLine,
+  Download,
 } from "lucide-react";
 import { assetPath } from "@/lib/assets";
 import {
@@ -22,14 +24,22 @@ import {
 
 const RELEASE_DOWNLOAD_BASE =
   "https://github.com/Devhub-Solutions/amagent/releases/latest/download";
+const RELEASE_API_URL =
+  "https://api.github.com/repos/Devhub-Solutions/amagent/releases/latest";
+
+type ReleaseAsset = {
+  name: string;
+  size: number;
+  download_count: number;
+};
 
 type Platform = {
   id: string;
   icon: React.ComponentType<{ className?: string; glow?: "off" | "soft" | "strong" }>;
   label: string;
   sublabel: string;
-  size: string;
   ext: string;
+  fileName: string;
   arch?: string;
   href: string;
   highlight?: boolean;
@@ -41,8 +51,8 @@ const PLATFORMS: Platform[] = [
     icon: WindowsIcon,
     label: "Windows",
     sublabel: "10 · 11",
-    size: "92 MB",
     ext: ".msi",
+    fileName: "AmAgent-windows.msi",
     href: `${RELEASE_DOWNLOAD_BASE}/AmAgent-windows.msi`,
     highlight: true,
   },
@@ -51,8 +61,8 @@ const PLATFORMS: Platform[] = [
     icon: AppleIcon,
     label: "macOS",
     sublabel: "Apple Silicon",
-    size: "78 MB",
     ext: ".dmg",
+    fileName: "AmAgent-macos-arm.dmg",
     arch: "M1 · M2 · M3",
     href: `${RELEASE_DOWNLOAD_BASE}/AmAgent-macos-arm.dmg`,
   },
@@ -61,8 +71,8 @@ const PLATFORMS: Platform[] = [
     icon: IntelIcon,
     label: "macOS",
     sublabel: "Intel",
-    size: "85 MB",
     ext: ".dmg",
+    fileName: "AmAgent-macos-intel.dmg",
     arch: "x86_64",
     href: `${RELEASE_DOWNLOAD_BASE}/AmAgent-macos-intel.dmg`,
   },
@@ -71,8 +81,8 @@ const PLATFORMS: Platform[] = [
     icon: LinuxIcon,
     label: "Linux",
     sublabel: "Debian / Ubuntu",
-    size: "88 MB",
     ext: ".deb",
+    fileName: "AmAgent-linux-amd64.deb",
     arch: "64-bit",
     href: `${RELEASE_DOWNLOAD_BASE}/AmAgent-linux-amd64.deb`,
   },
@@ -81,14 +91,47 @@ const PLATFORMS: Platform[] = [
     icon: RedHatIcon,
     label: "Linux",
     sublabel: "Fedora / RHEL",
-    size: "90 MB",
     ext: ".rpm",
+    fileName: "AmAgent-linux-x86_64.rpm",
     arch: "64-bit",
     href: `${RELEASE_DOWNLOAD_BASE}/AmAgent-linux-x86_64.rpm`,
   },
 ];
 
+function formatFileSize(bytes: number) {
+  const megabytes = bytes / (1024 * 1024);
+  return `${megabytes.toFixed(megabytes >= 100 ? 0 : 1)} MB`;
+}
+
+const numberFormatter = new Intl.NumberFormat("vi-VN");
+
 export function DownloadCTA() {
+  const [releaseAssets, setReleaseAssets] = useState<Record<string, ReleaseAsset>>({});
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(RELEASE_API_URL, {
+      headers: { Accept: "application/vnd.github+json" },
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
+        return response.json() as Promise<{ assets?: ReleaseAsset[] }>;
+      })
+      .then((release) => {
+        const assets = Object.fromEntries(
+          (release.assets ?? []).map((asset) => [asset.name, asset]),
+        );
+        setReleaseAssets(assets);
+      })
+      .catch(() => {
+        // Keep a neutral placeholder when GitHub rate-limits or is unavailable.
+      });
+
+    return () => controller.abort();
+  }, []);
+
   return (
     <section id="download" className="relative py-24 lg:py-32 overflow-hidden">
       <div className="absolute inset-0 mesh-glow-deep opacity-90 pointer-events-none" />
@@ -166,7 +209,9 @@ export function DownloadCTA() {
                         <div className="text-[10px] text-white/45 mt-0.5 flex items-center gap-2">
                           <span className="flex items-center gap-1">
                             <HardDrive className="h-2.5 w-2.5" />
-                            {p.size}
+                            {releaseAssets[p.fileName]
+                              ? formatFileSize(releaseAssets[p.fileName].size)
+                              : "Đang cập nhật"}
                           </span>
                           {p.arch && (
                             <span className="flex items-center gap-1">
@@ -174,6 +219,12 @@ export function DownloadCTA() {
                               {p.arch}
                             </span>
                           )}
+                        </div>
+                        <div className="text-[10px] text-white/40 mt-1 flex items-center gap-1">
+                          <Download className="h-2.5 w-2.5" />
+                          {releaseAssets[p.fileName]
+                            ? `${numberFormatter.format(releaseAssets[p.fileName].download_count)} lượt tải`
+                            : "Đang cập nhật lượt tải"}
                         </div>
                       </div>
                       {p.highlight && (
