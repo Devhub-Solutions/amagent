@@ -34,31 +34,36 @@ export function WindowsIcon({ className, glow = "soft" }: IconProps) {
   );
 }
 
-/* Apple — macOS logo, monochrome inherited from parent */
-export function AppleIcon({ className, glow = "soft" }: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={cn("h-5 w-5", GLOW_BY_INTENSITY[glow], className)}
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M17.05 12.04c-.02-2.18 1.78-3.23 1.86-3.28-1.01-1.48-2.59-1.69-3.15-1.71-1.34-.14-2.62.79-3.3.79-.69 0-1.74-.77-2.86-.75-1.47.02-2.83.86-3.59 2.17-1.53 2.65-.39 6.58 1.1 8.74.73 1.06 1.6 2.24 2.74 2.2 1.1-.04 1.52-.71 2.85-.71 1.32 0 1.71.71 2.87.69 1.19-.02 1.94-1.07 2.66-2.13.84-1.23 1.18-2.42 1.2-2.48-.03-.01-2.3-.88-2.32-3.5l-.06-.03Zm-2.42-6.42c.61-.74 1.02-1.76.91-2.78-.88.03-1.94.58-2.57 1.31-.57.65-1.06 1.69-.93 2.69.98.07 1.98-.5 2.59-1.22Z" />
-    </svg>
-  );
-}
-
-/* Linux — full-color Tux asset supplied for the landing page */
-export function LinuxIcon({ className, glow = "soft" }: IconProps) {
+function LocalBrandIcon({
+  src,
+  alt = "",
+  className,
+  glow = "soft",
+}: IconProps & { src: string; alt?: string }) {
   return (
     <img
-      src="/icons/linux-tux.svg"
-      alt=""
-      className={cn("h-5 w-5", GLOW_BY_INTENSITY[glow], className)}
-      aria-hidden="true"
+      src={src}
+      alt={alt}
+      className={cn("h-5 w-5 object-contain", GLOW_BY_INTENSITY[glow], className)}
+      aria-hidden={alt ? undefined : true}
       draggable={false}
     />
   );
+}
+
+/* Apple — Iconify Logos, local SVG */
+export function AppleIcon({ className, glow = "soft" }: IconProps) {
+  return <LocalBrandIcon src="/icons/iconify/apple.svg" className={className} glow={glow} />;
+}
+
+/* Linux — Iconify Logos Tux, local SVG */
+export function LinuxIcon({ className, glow = "soft" }: IconProps) {
+  return <LocalBrandIcon src="/icons/iconify/linux-tux.svg" className={className} glow={glow} />;
+}
+
+/* Red Hat — Iconify Logos, local SVG */
+export function RedHatIcon({ className, glow = "soft" }: IconProps) {
+  return <LocalBrandIcon src="/icons/iconify/redhat.svg" className={className} glow={glow} />;
 }
 
 /* Apple Silicon — M-series chip outline (alternative to Apple logo) */
@@ -81,16 +86,7 @@ export function ChipIcon({ className, glow = "soft" }: IconProps) {
   );
 }
 
-/* Intel — stylized "i" inside ring */
+/* Intel — Iconify Logos, local SVG */
 export function IntelIcon({ className, glow = "soft" }: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={cn("h-5 w-5", GLOW_BY_INTENSITY[glow], className)}
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M5 9h2.4v6.4H5V9Zm5.7 0v6.4h2.2v-3.7c0-.6.4-1 1-1 .5 0 .8.3.8.8v3.9H17v-4.2c0-1.4-.9-2.3-2.3-2.3-.7 0-1.3.2-1.8.7V9h-2.2Zm-3.4-2.3a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8Z" />
-    </svg>
-  );
+  return <LocalBrandIcon src="/icons/iconify/intel.svg" className={className} glow={glow} />;
 }

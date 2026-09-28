@@ -15,6 +15,7 @@ import {
   AppleIcon,
   WindowsIcon,
   LinuxIcon,
+  RedHatIcon,
   ChipIcon,
   IntelIcon,
 } from "./PlatformIcons";
@@ -77,7 +78,7 @@ const PLATFORMS: Platform[] = [
   },
   {
     id: "linux-rpm",
-    icon: LinuxIcon,
+    icon: RedHatIcon,
     label: "Linux",
     sublabel: "Fedora / RHEL",
     size: "90 MB",
