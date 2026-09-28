@@ -78,6 +78,7 @@ type Platform = {
   size: string;
   ext: string;
   arch?: string;
+  href: string;
   highlight?: boolean;
 };
 
@@ -88,7 +89,8 @@ const PLATFORMS: Platform[] = [
     label: "Windows",
     sublabel: "10 · 11",
     size: "92 MB",
-    ext: ".exe",
+    ext: ".msi",
+    href: assetPath("/downloads/amagent-windows.msi"),
     highlight: true,
   },
   {
@@ -99,6 +101,7 @@ const PLATFORMS: Platform[] = [
     size: "78 MB",
     ext: ".dmg",
     arch: "M1 · M2 · M3",
+    href: assetPath("/downloads/amagent-macos-arm.dmg"),
   },
   {
     id: "macos-intel",
@@ -108,6 +111,7 @@ const PLATFORMS: Platform[] = [
     size: "85 MB",
     ext: ".dmg",
     arch: "x86_64",
+    href: assetPath("/downloads/amagent-macos-intel.dmg"),
   },
   {
     id: "linux-deb",
@@ -117,15 +121,7 @@ const PLATFORMS: Platform[] = [
     size: "88 MB",
     ext: ".deb",
     arch: "64-bit",
-  },
-  {
-    id: "linux-appimage",
-    icon: LinuxIcon,
-    label: "Linux",
-    sublabel: "AppImage",
-    size: "92 MB",
-    ext: ".AppImage",
-    arch: "universal",
+    href: assetPath("/downloads/amagent-linux-amd64.deb"),
   },
   {
     id: "linux-rpm",
@@ -135,6 +131,7 @@ const PLATFORMS: Platform[] = [
     size: "90 MB",
     ext: ".rpm",
     arch: "64-bit",
+    href: assetPath("/downloads/amagent-linux-x86_64.rpm"),
   },
 ];
 
@@ -184,7 +181,8 @@ export function DownloadCTA() {
                   {PLATFORMS.map((p, i) => (
                     <motion.a
                       key={p.id}
-                      href="#"
+                      href={p.href}
+                      download
                       initial={{ opacity: 0, y: 12 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
