@@ -20,7 +20,7 @@ import {
 } from "./PlatformIcons";
 
 const RELEASE_DOWNLOAD_BASE =
-  "https://github.com/Devhub-Solutions/AmAgentCore/releases/latest/download";
+  "https://github.com/Devhub-Solutions/amagent/releases/latest/download";
 
 type Platform = {
   id: string;
