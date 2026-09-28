@@ -1,0 +1,115 @@
+name: Sync release from AmAgentCore
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Check for a new Core release every 15 minutes.
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-amagent-release
+  cancel-in-progress: false
+
+env:
+  SOURCE_REPO: Devhub-Solutions/AmAgentCore
+  TARGET_REPO: Devhub-Solutions/amagent
+
+jobs:
+  sync-release:
+    name: Sync latest installer release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install GitHub CLI
+        run: gh --version
+
+      - name: Find latest Core release
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="$(gh release view --repo "$SOURCE_REPO" --json tagName --jq .tagName)"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Latest source release: $tag"
+
+      - name: Check whether target release is already up to date
+        id: target
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.source.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$TARGET_REPO" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Target release $TAG already exists; assets will be refreshed."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Target release $TAG does not exist; it will be created."
+          fi
+
+      - name: Download installer assets from Core
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.source.outputs.tag }}
+        run: |
+          set -euo pipefail
+          rm -rf release-assets
+          mkdir -p release-assets
+          gh release download "$TAG" \
+            --repo "$SOURCE_REPO" \
+            --dir release-assets \
+            --pattern 'AmAgent-*' \
+            --pattern 'SHA256SUMS'
+
+          expected=(
+            AmAgent-windows.msi
+            AmAgent-macos-arm.dmg
+            AmAgent-macos-intel.dmg
+            AmAgent-linux-amd64.deb
+            AmAgent-linux-x86_64.rpm
+            SHA256SUMS
+          )
+          for file in "${expected[@]}"; do
+            test -f "release-assets/$file" || {
+              echo "Missing required source asset: $file" >&2
+              exit 1
+            }
+          done
+
+      - name: Verify SHA-256 checksums
+        working-directory: release-assets
+        run: sha256sum -c SHA256SUMS
+
+      - name: Create target release
+        if: steps.target.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.source.outputs.tag }}
+        run: |
+          set -euo pipefail
+          gh release create "$TAG" \
+            --repo "$TARGET_REPO" \
+            --title "AmAgent $TAG" \
+            --notes "Installer release synced from [$SOURCE_REPO](https://github.com/$SOURCE_REPO/releases/tag/$TAG)." \
+            --latest \
+            release-assets/*
+
+      - name: Refresh existing target release assets
+        if: steps.target.outputs.exists == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.source.outputs.tag }}
+        run: |
+          set -euo pipefail
+          gh release upload "$TAG" \
+            --repo "$TARGET_REPO" \
+            --clobber \
+            release-assets/*
+          gh release edit "$TAG" \
+            --repo "$TARGET_REPO" \
+            --title "AmAgent $TAG" \
+            --latest
